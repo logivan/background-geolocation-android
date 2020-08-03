@@ -57,6 +57,16 @@ public class BackgroundGeolocationFacade {
     public static final int AUTHORIZATION_AUTHORIZED = 1;
     public static final int AUTHORIZATION_DENIED = 0;
 
+    public static String[] PERMISSIONS_Q = {
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION
+    };
+
+    public static String[] PERMISSIONS = {
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
 
     private boolean mServiceBroadcastReceiverRegistered = false;
     private boolean mLocationModeChangeReceiverRegistered = false;
@@ -92,19 +102,9 @@ public class BackgroundGeolocationFacade {
     }
 
     private String[] getPermissionsBySDK(){
-        String[] PERMISSIONS;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            String[] PERMISSIONS = {
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            };
-            return PERMISSIONS;
+            return PERMISSIONS_Q;
         } else {
-            String[] PERMISSIONS = {
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            };
             return PERMISSIONS;
         }
     }
@@ -395,7 +395,7 @@ public class BackgroundGeolocationFacade {
         } catch (InterruptedException e) {
             logger.error("Interrupted while waiting location", e);
             Thread.currentThread().interrupt();
-             RuntimeException rError = new RuntimeException("Interrupted while waiting location", e);
+            RuntimeException rError = new RuntimeException("Interrupted while waiting location", e);
             notify(rError);
             throw  rError;
         }
